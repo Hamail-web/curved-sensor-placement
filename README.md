@@ -1,6 +1,3 @@
-# curved-sensor-placement
-Extension of Kim et al. (IEEE SysCon 2025) sensor placement framework to curved circular arc trajectories using 3-D representation space.
-
 # Optimal Sensor Placement for Curved Target Trajectories
 
 This repository contains the Python simulation code and mathematical formulation for extending stochastic target barrier coverage systems to curved (circular arc) target trajectories. This project was developed as a research task submission for the Department of Electrical and Computer Engineering.
@@ -30,5 +27,5 @@ A comparison of placements highlights how the curved-aware strategy adjusts sens
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/curved-sensor-placement.git
+   git clone https://github.com/Hamail-web/curved-sensor-placement.git
    cd curved-sensor-placement
