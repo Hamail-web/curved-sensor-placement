@@ -210,46 +210,7 @@ def random_placement(num_sensors: int) -> np.ndarray:
     np.random.seed(1337)
     return np.random.uniform(0.5, DOMAIN_SIZE - 0.5, (num_sensors, 2))
 
-def update_latex_reports(sensor_counts, results_rand, results_linear, results_curved):
-    """Automatically update the Table and PGFPlots coordinates in final_report.tex and report_single.tex"""
-    for filepath in ['final_report.tex', 'report_single.tex']:
-        if not os.path.exists(filepath):
-            continue
-            
-        with open(filepath, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-        # 1. Update Table rows
-        table_start = content.find(r"\begin{tabular}{|c|c|c|c|}")
-        table_end = content.find(r"\end{tabular}", table_start)
-        if table_start != -1 and table_end != -1:
-            table_header = "\\begin{tabular}{|c|c|c|c|}\n\\hline\n\\textbf{Sensors (K)} & \\textbf{Random} & \\textbf{Linear-Assumed} & \\textbf{Curved-Aware} \\\\ \\hline\n"
-            table_rows = ""
-            for idx, K in enumerate(sensor_counts):
-                table_rows += f"{K} & {results_rand[idx]:.4f} & {results_linear[idx]:.4f} & \\textbf{{{results_curved[idx]:.4f}}} \\\\ \\hline\n"
-            content = content[:table_start] + table_header + table_rows + content[table_end:]
-            
-        # 2. Update PGFPlots coordinates
-        content = re.sub(
-            r"\\addplot\[color=red, mark=\*, linewidth=1\.2pt\]\s+coordinates\s+\{[^\}]+\};",
-            lambda m: f"\\addplot[color=red, mark=*, linewidth=1.2pt]\n    coordinates " + "".join([f"({K},{val:.4f})" for K, val in zip(sensor_counts, results_rand)]) + ";",
-            content
-        )
-        content = re.sub(
-            r"\\addplot\[color=green!60!black, mark=square\*, linewidth=1\.2pt\]\s+coordinates\s+\{[^\}]+\};",
-            lambda m: f"\\addplot[color=green!60!black, mark=square*, linewidth=1.2pt]\n    coordinates " + "".join([f"({K},{val:.4f})" for K, val in zip(sensor_counts, results_linear)]) + ";",
-            content
-        )
-        content = re.sub(
-            r"\\addplot\[color=blue, mark=triangle\*, linewidth=1\.2pt\]\s+coordinates\s+\{[^\}]+\};",
-            lambda m: f"\\addplot[color=blue, mark=triangle*, linewidth=1.2pt]\n    coordinates " + "".join([f"({K},{val:.4f})" for K, val in zip(sensor_counts, results_curved)]) + ";",
-            content
-        )
-        
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
-            
-    print("LaTeX reports successfully updated with the new simulation results.")
+# LaTeX updates removed for clean standalone execution.
 
 def run_simulation():
     os.makedirs('results', exist_ok=True)
@@ -293,8 +254,7 @@ def run_simulation():
             f.write(f"{K},{results_rand[idx]:.6f},{results_linear[idx]:.6f},{results_curved[idx]:.6f}\n")
     print("Numerical results saved to results/simulation_results.txt")
         
-    # Update LaTeX documents automatically
-    update_latex_reports(sensor_counts, results_rand, results_linear, results_curved)
+    # (LaTeX documents already generated, no online update required)
         
     # Plot results
     plt.figure(figsize=(7, 5))
